@@ -9,14 +9,15 @@ import 'mui-react/dist/mui-react.css';
 
 import TableComponent from './components/Table.js';
 
-var key =0;
+
 var _this;
 export default class App extends Component {
   constructor() {
       super();
       _this = this;
       this.state = {
-        contracts:[]
+        contracts:[],
+        key_inc:0
       };
   }
   addContract(data){
@@ -25,12 +26,13 @@ export default class App extends Component {
       price:data.price,
       description:data.description,
       edit:true,
-      key:key
+      key:this.state.key_inc
     }
-    key +=1;
+    var key = key_inc +1;
     var contracts = _this.state.contracts.slice().concat([Contract]);
     _this.setState({
-      contracts:contracts
+      contracts:contracts,
+      key_inc:key
     });
   }
   changeContract(data){

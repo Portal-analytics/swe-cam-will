@@ -3,8 +3,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextField from 'material-ui/TextField';
-//import {Button} from 'mui-react';
-//import Button from 'mui-react/lib/components/Button.js';
 import FlatButton from 'material-ui/FlatButton';
 import SingleContract from './SingleContract.js';
 import 'mui-react/dist/mui-react.css';
@@ -17,7 +15,6 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-
 
 
 export default class TableComponent extends React.Component {
