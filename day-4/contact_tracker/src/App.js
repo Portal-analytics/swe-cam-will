@@ -21,101 +21,86 @@ firebase.initializeApp(config);
 var database = firebase.database();
 var _this;
 
-const getSectionsDB = () => {
-  console.log("where are u????"+database.ref('/').once())
+
+
+function writeNewContractData(name, price, description) {
+  var key = firebase.database().ref().child('contracts').push().key
+  //console.log(name +price+description);
+  firebase.database().ref('/contracts/' + key).set({
+    name: name,
+    price: price,
+    description : description
+  });
+  return key;
 }
-
-
-function writeContractData(name, price, description) {
-  //var key = firebase.database().ref().child('contracts').push().key
-  firebase.database().ref('/contracts/' + name).set({
+function writeContractData(name, price, description, key) {
+  firebase.database().ref('/contracts/' + key).set({
     name: name,
     price: price,
     description : description
   });
 }
+
+
+//receiving contracts from database
 function getContractData(){
     var contracts = database.ref('/contracts');
-    contracts.on('value', function(snapshot){
+    contracts.once('value', function(snapshot){
       createContract(snapshot.val());
     });
 }
+
 function createContract(data){
-  for(var contract in data){
+  console.log("!!!!!!");
+  for(var key in data){
+    var contract = data[key];
+    //console.log(contract);
       var Contract = {
         name:contract.name,
         price:contract.price,
         description:contract.description,
         edit:true,
-        key:11
+        key:key
       }
-      console.log(Contract);
       addContract2(Contract);
     }
 }
 function addContract2(data){
-    var Contract = {
-      name:data.name,
-      price:data.price,
-      description:data.description,
-      edit:true,
-      key:_this.state.key_inc
-    }
-    var key = _this.state.key_inc +1;
-    var contracts = _this.state.contracts.slice().concat([Contract]);
+    var contracts = _this.state.contracts.slice().concat([data]);
     _this.setState({
       contracts:contracts,
-      key_inc:key
     });
   }
+  //receiving contracts from database
+
+
 export default class App extends Component {
   constructor() {
       super();
       _this = this;
       this.state = {
-        contracts:[],
-        key_inc:0
+        contracts:[]
       };
       getContractData();
   }
   addContract(data){
+    var key = writeContractData(data.name,data.price,data.description);
     var Contract = {
       name:data.name,
       price:data.price,
       description:data.description,
       edit:true,
-      key:_this.state.key_inc
+      key:key
     }
-    writeContractData(data.name,data.price,data.description);
-    var key = _this.state.key_inc +1;
     var contracts = _this.state.contracts.slice().concat([Contract]);
     _this.setState({
       contracts:contracts,
-      key_inc:key
     });
   }
   changeContract(data){
-    var index;
-    for(var i=0;i<_this.state.contracts.length;i++){
-      if(_this.state.contracts[i].key == data.key){
-        index = i;
-        break;
-      }
-    }
-    var contract = {
-          name:data.name,
-          price:data.price,
-          description:data.description,
-          key:data.key,
-          edit: true
-        }
-    writeContractData(data.name,data.price,data.description);
-    var state = _this.state;
-    state[index] = contract;
-    _this.setState({state});
+    writeContractData(data.name,data.price,data.description, data.key);
   }
   editContract(field, key, value){
-    console.log(key);
     var index;
     for(var i=0;i<_this.state.contracts.length;i++){
       if(_this.state.contracts[i].key == key){
@@ -134,12 +119,12 @@ export default class App extends Component {
       state.contracts[index].description = value;
     }
     else if(field == "edit"){
-      console.log(state.contracts[index]);
       state.contracts[index].edit = !(state.contracts[index].edit);
     }
      _this.setState({state});
   }
   render() {
+    console.log(this.state.contracts);
     return (
       <div className="App">
         <div className="App-header">

@@ -21,7 +21,7 @@ import {
 export default class SingleContract extends React.Component {
     constructor(props){
         super(props);
-        console.log(this.props);
+        //console.log(this.props);
     }
     handleNameChange(e){
         this.props.editContract("name", this.props.data.key, e.target.value)
@@ -36,7 +36,7 @@ export default class SingleContract extends React.Component {
         this.props.editContract("edit", this.props.data.key, "")
     }
     handleDoneChange(){
-        this.props.changeContract(this.props);
+        this.props.changeContract(this.props.data);
     }
     render(){
         return(
