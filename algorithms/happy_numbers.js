@@ -11,19 +11,22 @@ var prompt = require('prompt');
 prompt.start();
 
 prompt.get(['number'], function(err, result) {
-  number = result.number.toString(10).split('').map(Number);
+  starting_number = result.number.toString(10).split('').map(Number);
+  console.log(starting_number);
 
-  let squares = number.map(function(n) {
-    return Math.pow(n, 2);
-  });
-  function summing_squares(squares) {
-    console.log(squares);
-    let sum_of_squares = 0;
-    sum_of_squares = squares.map(function(n) {
-      sum_of_squares += n;
-      console.log(sum_of_squares);
+  let number = starting_number;
+  while (number != 1) {
+    let squares = number.map(function(n) {
+      return Math.pow(n, 2);
     });
-    return sum_of_squares;
+    {
+      sum_of_squares = squares.reduce(function(acc, num) {
+        return acc + num;
+      }, 0);
+    }
+    number = sum_of_squares;
+
+    console.log(number);
+    number = number.toString(10).split('').map(Number);
   }
-  summing_squares(squares);
 });
